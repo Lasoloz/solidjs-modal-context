@@ -55,29 +55,73 @@ export const ModalProvider = (props: ModalProviderProps) => {
 /**
  * Type of modal opener function returned by {@link useModalOpener} and {@link useModalControls}.
  */
-export type ModalOpener =
-  (<I extends NonNullable<unknown>>(component: ModalComponent<I>, data: ModalData<I>) => void)
-  | (<I extends undefined>(component: ModalComponent<I>) => void);
+export type ModalOpener = {
+  (component: ModalComponent): void;
+  <I = undefined>(component: ModalComponent<I>, data: ModalData<I>): void;
+};
+
 /**
  * Type of modal closer returned by {@link useModalCloser} and {@link useModalControls}.
  */
 export type ModalCloser = () => void;
 
+/**
+ * Use modal opener function
+ *
+ * @example
+ * Open a modal
+ * ```
+ * const openModal = useModalOpener();
+ * const handleClick = () => {
+ *   openModal(MyModal);
+ * };
+ * ```
+ */
 export function useModalOpener(): ModalOpener {
   const context = useContext(ModalContext);
   return createModalOpenerFromContext(context);
 }
 
+/**
+ * Use modal closer function
+ *
+ * @example
+ * Close a modal
+ * ```
+ * const closeModal = useModalCloser();
+ * const handleClick = () => {
+ *   closeModal();
+ * };
+ * ```
+ */
 export function useModalCloser(): ModalCloser {
   const context = useContext(ModalContext);
   return context.closeModal;
 }
 
+/**
+ * Use modal controls
+ *
+ * @example
+ * Open and close modal from two different functions within the same component
+ * ```
+ * const [openModal, closeModal] = useModalControls();
+ * const handleOpenButtonClick = () => {
+ *   openModal(MyModal);
+ * };
+ * const handleCloseButtonClick = () => {
+ *   closeModal();
+ * };
+ * ```
+ */
 export function useModalControls(): [ModalOpener, ModalCloser] {
   const context = useContext(ModalContext);
   return [createModalOpenerFromContext(context), context.closeModal];
 }
 
 function createModalOpenerFromContext(context: ModalContextType): ModalOpener {
-  return (component, data) => context.openModal(component as ModalComponent<unknown>, data as ModalData<unknown>);
+  return ((component, data) => context.openModal(
+      component as ModalComponent<unknown>,
+      data as ModalData<unknown>)
+  ) as ModalOpener;
 }
