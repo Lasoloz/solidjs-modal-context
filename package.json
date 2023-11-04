@@ -1,4 +1,46 @@
 {
   "name": "solidjs-modal-context",
-  "packageManager": "yarn@3.6.1"
+  "description": "A context-based utility for managing complex modals",
+  "author": "László Heim",
+  "license": "MIT",
+  "version": "0.1.0-SNAPSHOT",
+  "homepage": "https://github.com/Lasoloz/solidjs-modal-context#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lasoloz/solidjs-modal-context"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@3.6.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "solid": "./dist/index.jsx",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && rollup -c"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/preset-typescript": "^7.23.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "babel-preset-solid": "^1.8.4",
+    "prettier": "^3.0.3",
+    "rollup": "^4.3.0",
+    "solid-js": "^1.8.5",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "solid-js": "*"
+  }
 }
