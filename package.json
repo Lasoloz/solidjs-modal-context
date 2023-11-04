@@ -1,4 +1,7 @@
 {
   "name": "solidjs-modal-context",
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "yarn@3.6.1",
+  "dependencies": {
+    "solid-js": "^1.8.5"
+  }
 }
