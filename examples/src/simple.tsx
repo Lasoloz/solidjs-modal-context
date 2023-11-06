@@ -1,28 +1,11 @@
-import { render } from "solid-js/web";
-import { ModalProvider, useModalOpener } from "../../src/context";
-import { ModalProps } from "../../src/types";
+import { ModalProps, useModalOpener } from "@lib";
 
-const root = document.getElementById("root");
-
-if (!(root instanceof HTMLElement)) {
-  throw new Error(
-    "Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?"
-  );
-}
-
-render(() => (
-  <ModalProvider>
-    <MyButtons />
-  </ModalProvider>
-), root);
-
-const MyButtons = () => {
+export const SimpleExample = () => {
   const openModal = useModalOpener();
   const input = "Something";
 
   const handleFirstButtonClick = () => {
     openModal(MyModalWithoutInput);
-    return;
   };
   const handleSecondButtonClick = () => {
     openModal(MyModalWithInput, { input });
@@ -35,10 +18,11 @@ const MyButtons = () => {
   };
 
   return (
-    <>
+    <div>
+      <h2>Open simple modals</h2>
       <button onClick={handleFirstButtonClick}>Open modal without input</button>
       <button onClick={handleSecondButtonClick}>Open modal with title: {input}</button>
-    </>
+    </div>
   );
 };
 

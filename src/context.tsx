@@ -15,6 +15,9 @@ const ModalContext = createContext<ModalContextType>({
   }
 });
 
+/**
+ * Props for the {@link ModalProvider}.
+ */
 export type ModalProviderProps = MaybeFlowProps;
 
 /**
