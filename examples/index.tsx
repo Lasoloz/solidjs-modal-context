@@ -2,8 +2,8 @@
 
 import { render } from "solid-js/web";
 import { For } from "solid-js";
-import { ModalProvider } from "@lib";
 import { A, Route, Router, Routes } from "@solidjs/router";
+import { ModalProvider } from "@lib";
 import { SimpleExample } from "@/simple";
 
 const root = document.getElementById("root");

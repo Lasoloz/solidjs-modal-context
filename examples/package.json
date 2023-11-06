@@ -3,7 +3,7 @@
   "version": "0.1.0-SNAPSHOT",
   "description": "Examples for `solidjs-modal-context`",
   "scripts": {
-    "dev": "vite"
+    "dev": "LIVE_LIB=true vite"
   },
   "dependencies": {
     "@solidjs/router": "^0.8.3",

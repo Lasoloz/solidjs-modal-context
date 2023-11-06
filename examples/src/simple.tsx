@@ -1,4 +1,5 @@
 import { ModalProps, useModalOpener } from "@lib";
+import { FlowProps } from "solid-js";
 
 export const SimpleExample = () => {
   const openModal = useModalOpener();
@@ -27,13 +28,19 @@ export const SimpleExample = () => {
 };
 
 const MyModalWithoutInput = (_: ModalProps) => (
-  <div style="border: 1px solid black;">
+  <SimpleModal>
     <p>My simple modal</p>
-  </div>
+  </SimpleModal>
 );
 
 const MyModalWithInput = (props: ModalProps<string>) => (
-  <div style="border: 1px solid black;">
+  <SimpleModal>
     <p>My modal with input: {props.input}</p>
+  </SimpleModal>
+);
+
+const SimpleModal = (props: FlowProps) => (
+  <div style="border: 1px solid black; border-radius: 8px; padding: 0.5em 1.5em; background: white;">
+    {props.children}
   </div>
 );

@@ -1,7 +1,6 @@
 import { createContext, createSignal, Show, useContext } from "solid-js";
 import { ModalComponent, ModalData } from "./types";
-import { MaybeFlowProps, ModalState } from "./common";
-import { ModalRenderer } from "./components";
+import { MaybeFlowProps, ModalRenderer, ModalState } from "./common";
 
 type ModalContextType = {
   openModal(component: ModalComponent<unknown>, data: ModalData<unknown>): void;
