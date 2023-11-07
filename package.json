@@ -25,6 +25,9 @@
   "files": [
     "dist"
   ],
+  "workspaces": [
+    "examples"
+  ],
   "scripts": {
     "build": "tsc && rollup -c"
   },
