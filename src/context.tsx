@@ -3,12 +3,12 @@ import { ModalComponent, ModalData } from "./types";
 import { MaybeFlowProps, ModalRenderer, ModalState } from "./common";
 
 type ModalContextType = {
-  openModal(component: ModalComponent<unknown>, data: ModalData<unknown>): void;
+  openModal(component: ModalComponent<unknown, unknown>, data: ModalData<unknown, unknown>): void;
   closeModal(): void;
 }
 
 const ModalContext = createContext<ModalContextType>({
-  openModal(_component: ModalComponent<unknown>, _data: ModalData<unknown>) {
+  openModal(_component: ModalComponent<unknown, unknown>, _data: ModalData<unknown, unknown>) {
   },
   closeModal() {
   }
@@ -33,10 +33,10 @@ export type ModalProviderProps = MaybeFlowProps;
  * ```
  */
 export const ModalProvider = (props: ModalProviderProps) => {
-  const [modal, setModal] = createSignal<ModalState<unknown> | null>(null);
+  const [modal, setModal] = createSignal<ModalState<unknown, unknown> | null>(null);
 
   const modalControls: ModalContextType = {
-    openModal(component: ModalComponent<unknown>, data: ModalData<unknown>) {
+    openModal(component: ModalComponent<unknown, unknown>, data: ModalData<unknown, unknown>) {
       setModal({ component, data });
     },
     closeModal() {
@@ -47,25 +47,22 @@ export const ModalProvider = (props: ModalProviderProps) => {
   return (
     <ModalContext.Provider value={modalControls}>
       <Show when={modal() != null}>
-        <ModalRenderer state={modal()!} close={modalControls.closeModal} />
+        <ModalRenderer state={modal()!} onClose={modalControls.closeModal} />
       </Show>
       {props.children}
     </ModalContext.Provider>
   );
 };
 
+// TODO: Think about better modal closing options (e.g. return function after modal opening
+//  or a generic modal closing/popping method)
 /**
- * Type of modal opener function returned by {@link useModalOpener} and {@link useModalControls}.
+ * Type of modal opener function returned by {@link useModalOpener}.
  */
 export type ModalOpener = {
   (component: ModalComponent): void;
-  <I = undefined>(component: ModalComponent<I>, data: ModalData<I>): void;
+  <I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;
 };
-
-/**
- * Type of modal closer returned by {@link useModalCloser} and {@link useModalControls}.
- */
-export type ModalCloser = () => void;
 
 /**
  * Use modal opener function
@@ -81,49 +78,9 @@ export type ModalCloser = () => void;
  */
 export function useModalOpener(): ModalOpener {
   const context = useContext(ModalContext);
-  return createModalOpenerFromContext(context);
-}
-
-/**
- * Use modal closer function
- *
- * @example
- * Close a modal
- * ```
- * const closeModal = useModalCloser();
- * const handleClick = () => {
- *   closeModal();
- * };
- * ```
- */
-export function useModalCloser(): ModalCloser {
-  const context = useContext(ModalContext);
-  return context.closeModal;
-}
-
-/**
- * Use modal controls
- *
- * @example
- * Open and close modal from two different functions within the same component
- * ```
- * const [openModal, closeModal] = useModalControls();
- * const handleOpenButtonClick = () => {
- *   openModal(MyModal);
- * };
- * const handleCloseButtonClick = () => {
- *   closeModal();
- * };
- * ```
- */
-export function useModalControls(): [ModalOpener, ModalCloser] {
-  const context = useContext(ModalContext);
-  return [createModalOpenerFromContext(context), context.closeModal];
-}
-
-function createModalOpenerFromContext(context: ModalContextType): ModalOpener {
   return ((component, data) => context.openModal(
-      component as ModalComponent<unknown>,
-      data as ModalData<unknown>)
+      component as ModalComponent<unknown, unknown>,
+      data as ModalData<unknown, unknown>)
   ) as ModalOpener;
 }
+

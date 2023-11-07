@@ -15,7 +15,7 @@ export const SimpleExample = () => {
   const typeExamples = () => {
     openModal(MyModalWithoutInput, {}); // It's fine
     openModal(MyModalWithoutInput, { input: "something" }); // It's also fine // TODO: Fix me?
-    // openModal(MyModalWithInput); // Error, yay!
+    openModal(MyModalWithInput); // Error, yay!
   };
 
   return (

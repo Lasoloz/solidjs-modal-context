@@ -2,7 +2,7 @@ import { ModalComponent, ModalData } from "./types";
 import { FlowProps, JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
-export type ModalState<I = undefined> = { component: ModalComponent<I>, data: ModalData<I> };
+export type ModalState<I = undefined, O = undefined> = { component: ModalComponent<I, O>, data: ModalData<I, O> };
 
 /**
  * Custom Props definition that looks like {@link FlowProps}, but the `children` can be optional.
@@ -10,16 +10,30 @@ export type ModalState<I = undefined> = { component: ModalComponent<I>, data: Mo
 export type MaybeFlowProps<P = {}, C = JSX.Element> = P & { children?: C };
 
 export type ModalRendererProps = {
-  state: ModalState<unknown>;
-  close: () => void;
+  state: ModalState<unknown, unknown>;
+  onClose: () => void;
 };
 
+// TODO: Rename it to ModalHost in the future?
 export const ModalRenderer = (props: ModalRendererProps) => {
   const state = () => props.state;
 
   const handleOutsideClick = () => {
-    props.close();
+    // TODO: Closing doesn't return data, disable outside click for modals without data
+    props.onClose();
   };
+
+  const handleModalClose = () => {
+    const onCloseCallback = state().data.onClose;
+    if (onCloseCallback == null) {
+      return props.onClose;
+    }
+
+    return (data?: unknown) => {
+      onCloseCallback(data);
+      props.onClose();
+    }
+  }
 
   return (
     <div
@@ -29,7 +43,7 @@ export const ModalRenderer = (props: ModalRendererProps) => {
       onClick={handleOutsideClick}
     >
       <div onClick={e => e.stopPropagation()}>
-        <Dynamic component={state().component} input={state().data.input} />
+        <Dynamic component={state().component} input={state().data.input} onClose={handleModalClose} />
       </div>
     </div>
   );
