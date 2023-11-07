@@ -40,7 +40,7 @@ const MyModalWithInput = (props: ModalProps<string>) => (
 );
 
 const SimpleModal = (props: FlowProps) => (
-  <div style="border: 1px solid black; border-radius: 8px; padding: 0.5em 1.5em; background: white;">
+  <div style="border: 1px solid black; border-radius: 8px; padding: 0.5em 1.5em; background: white; min-width: 600px">
     {props.children}
   </div>
 );
