@@ -1,10 +1,11 @@
 // TODO: Create examples npm subproject
 
 import { render } from "solid-js/web";
-import { For } from "solid-js";
+import { For, JSX } from "solid-js";
 import { A, Route, Router, Routes } from "@solidjs/router";
 import { ModalProvider } from "@lib";
 import { SimpleExample } from "@/simple";
+import { OutputExample } from "@/output";
 
 const root = document.getElementById("root");
 
@@ -15,8 +16,13 @@ if (!(root instanceof HTMLElement)) {
 }
 
 const ROUTES = [
-  { name: "Simple Example", route: "/", component: SimpleExample }
-] as const;
+  { name: "Simple Example", route: "/", component: SimpleExample },
+  { name: "Output Example", route: "/output", component: OutputExample }
+] as const satisfies readonly {
+  name: string,
+  route: string,
+  component: () => JSX.Element
+}[];
 
 render(() => (
   <Router>
