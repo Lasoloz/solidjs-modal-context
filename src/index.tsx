@@ -1,11 +1,14 @@
-import type { ModalComponent, ModalData, ModalProps } from "./types";
-import type { ModalCloser, ModalOpener, ModalProviderProps } from "./context";
+import type { ModalComponent, ModalData, ModalOpener, ModalProps, ModalProviderProps } from "./types";
 
 export {
   ModalProvider,
-  useModalOpener,
-  useModalCloser,
-  useModalControls
+  useModalOpener
 } from "./context";
 
-export { ModalComponent, ModalData, ModalProps, ModalProviderProps, ModalOpener, ModalCloser };
+export {
+  ModalComponent,
+  ModalData,
+  ModalOpener,
+  ModalProps,
+  ModalProviderProps
+};

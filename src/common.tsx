@@ -1,13 +1,7 @@
 import { ModalComponent, ModalData } from "./types";
-import { FlowProps, JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 export type ModalState<I = undefined, O = undefined> = { component: ModalComponent<I, O>, data: ModalData<I, O> };
-
-/**
- * Custom Props definition that looks like {@link FlowProps}, but the `children` can be optional.
- */
-export type MaybeFlowProps<P = {}, C = JSX.Element> = P & { children?: C };
 
 export type ModalRendererProps = {
   state: ModalState<unknown, unknown>;
@@ -32,8 +26,8 @@ export const ModalRenderer = (props: ModalRendererProps) => {
     return (data?: unknown) => {
       onCloseCallback(data);
       props.onClose();
-    }
-  }
+    };
+  };
 
   return (
     <div

@@ -1,4 +1,5 @@
 import { JSX } from "solid-js";
+import { MaybeFlowProps } from "./common-types";
 
 /**
  * Prop type for modals.
@@ -45,3 +46,18 @@ export type ModalComponent<I = undefined, O = undefined> = (props: ModalProps<I,
 export type ModalData<I = undefined, O = undefined> =
   (I extends undefined ? {} : { input: I })
   & (O extends undefined ? { onClose?: () => void } : { onClose?: (data: O) => void });
+
+/**
+ * Props for the {@link ModalProvider}.
+ */
+export type ModalProviderProps = MaybeFlowProps;
+
+// TODO: Think about better modal closing options (e.g. return function after modal opening
+//  or a generic modal closing/popping method)
+/**
+ * Type of modal opener function returned by {@link useModalOpener}.
+ */
+export type ModalOpener = {
+  (component: ModalComponent): void;
+  <I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;
+};

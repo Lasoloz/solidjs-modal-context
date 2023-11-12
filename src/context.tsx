@@ -1,6 +1,6 @@
 import { createContext, createSignal, Show, useContext } from "solid-js";
-import { ModalComponent, ModalData } from "./types";
-import { MaybeFlowProps, ModalRenderer, ModalState } from "./common";
+import { ModalComponent, ModalData, ModalOpener, ModalProviderProps } from "./types";
+import { ModalRenderer, ModalState } from "./common";
 
 type ModalContextType = {
   openModal(component: ModalComponent<unknown, unknown>, data: ModalData<unknown, unknown>): void;
@@ -13,11 +13,6 @@ const ModalContext = createContext<ModalContextType>({
   closeModal() {
   }
 });
-
-/**
- * Props for the {@link ModalProvider}.
- */
-export type ModalProviderProps = MaybeFlowProps;
 
 /**
  * Provider for modal context and modal rendering
@@ -54,16 +49,6 @@ export const ModalProvider = (props: ModalProviderProps) => {
   );
 };
 
-// TODO: Think about better modal closing options (e.g. return function after modal opening
-//  or a generic modal closing/popping method)
-/**
- * Type of modal opener function returned by {@link useModalOpener}.
- */
-export type ModalOpener = {
-  (component: ModalComponent): void;
-  <I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;
-};
-
 /**
  * Use modal opener function
  *
@@ -80,7 +65,7 @@ export function useModalOpener(): ModalOpener {
   const context = useContext(ModalContext);
   return ((component, data) => context.openModal(
       component as ModalComponent<unknown, unknown>,
-      data as ModalData<unknown, unknown>)
+      (data ?? {}) as ModalData<unknown, unknown>)
   ) as ModalOpener;
 }
 
