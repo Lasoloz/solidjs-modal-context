@@ -17,7 +17,7 @@ export const ModalRenderer = (props: ModalRendererProps) => {
     props.onClose();
   };
 
-  const handleModalClose = () => {
+  const createModalClose = () => {
     const onCloseCallback = state().data.onClose;
     if (onCloseCallback == null) {
       return props.onClose;
@@ -37,7 +37,7 @@ export const ModalRenderer = (props: ModalRendererProps) => {
       onClick={handleOutsideClick}
     >
       <div onClick={e => e.stopPropagation()}>
-        <Dynamic component={state().component} input={state().data.input} onClose={handleModalClose} />
+        <Dynamic component={state().component} input={state().data.input} onClose={createModalClose()} />
       </div>
     </div>
   );
