@@ -45,10 +45,14 @@ export type ModalComponent<I = undefined, O = undefined> = (props: ModalProps<I,
  */
 export type ModalData<I = undefined, O = undefined> =
   (I extends undefined ? {} : { input: I })
-  & (O extends undefined ? { onClose?: () => void } : { onClose?: (data: O) => void });
+  & (O extends undefined ? { onClose?: () => void } : { onClose?: (data: O) => void })
+  & ({ cancelable: true, onCancel?: () => void } | { cancelable?: false });
 
 /**
  * Props for the {@link ModalProvider}.
+ *
+ * * `defaultCancelable` - whether modals are cancelable by default if `cancelable` flag is
+ *   not provided when the modal is opened. Defaults to false.
  */
 export type ModalProviderProps = MaybeFlowProps;
 
