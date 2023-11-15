@@ -1,5 +1,3 @@
-// TODO: Create examples npm subproject
-
 import { render } from "solid-js/web";
 import { createMemo, For, JSX } from "solid-js";
 import { A, Route, Router, Routes, useLocation } from "@solidjs/router";
