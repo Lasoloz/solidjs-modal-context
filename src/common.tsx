@@ -1,24 +1,50 @@
 import { ModalComponent, ModalData } from "./types";
-import { FlowProps, JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
-export type ModalState<I = undefined> = { component: ModalComponent<I>, data: ModalData<I> };
-
-/**
- * Custom Props definition that looks like {@link FlowProps}, but the `children` can be optional.
- */
-export type MaybeFlowProps<P = {}, C = JSX.Element> = P & { children?: C };
+export type ModalState<I = undefined, O = undefined> = { component: ModalComponent<I, O>, data: ModalData<I, O> };
 
 export type ModalRendererProps = {
-  state: ModalState<unknown>;
-  close: () => void;
+  state: ModalState<unknown, unknown>;
+  onClose: () => void;
+  fallbackCancelable: boolean;
 };
 
+// TODO: Rename it to ModalHost in the future?
 export const ModalRenderer = (props: ModalRendererProps) => {
   const state = () => props.state;
 
-  const handleOutsideClick = () => {
-    props.close();
+  const createOutsideClick = () => {
+    const data = state().data;
+
+    if ("onCancel" in data) {
+      const onCancelCallback = data.onCancel;
+      if (onCancelCallback != null) {
+        return () => {
+          onCancelCallback();
+          props.onClose();
+        };
+      }
+    }
+
+    // @ts-ignore We don't care, that cancelable might not exist
+    if (!("cancelable" in data) && props.fallbackCancelable || data.cancelable) {
+      return () => props.onClose();
+    }
+
+    return () => {
+    };
+  };
+
+  const createModalClose = () => {
+    const onCloseCallback = state().data.onClose;
+    if (onCloseCallback == null) {
+      return props.onClose;
+    }
+
+    return (data?: unknown) => {
+      onCloseCallback(data);
+      props.onClose();
+    };
   };
 
   return (
@@ -26,10 +52,10 @@ export const ModalRenderer = (props: ModalRendererProps) => {
       style="width: 100vw; height: 100vh; position: fixed; left: 0; top: 0;
         background-color: rgba(180, 180, 180, 25%); backdrop-filter: blur(4px);
         display: flex; justify-content: center; align-items: center;"
-      onClick={handleOutsideClick}
+      onClick={createOutsideClick()}
     >
       <div onClick={e => e.stopPropagation()}>
-        <Dynamic component={state().component} input={state().data.input} />
+        <Dynamic component={state().component} input={state().data.input} onClose={createModalClose()} />
       </div>
     </div>
   );

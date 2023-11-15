@@ -1,10 +1,9 @@
-// TODO: Create examples npm subproject
-
 import { render } from "solid-js/web";
-import { For } from "solid-js";
-import { A, Route, Router, Routes } from "@solidjs/router";
+import { createMemo, For, JSX } from "solid-js";
+import { A, Route, Router, Routes, useLocation } from "@solidjs/router";
 import { ModalProvider } from "@lib";
 import { SimpleExample } from "@/simple";
+import { OutputExample } from "@/output";
 
 const root = document.getElementById("root");
 
@@ -14,13 +13,28 @@ if (!(root instanceof HTMLElement)) {
   );
 }
 
-const ROUTES = [
-  { name: "Simple Example", route: "/", component: SimpleExample }
+type TestRouteDef = {
+  name: string,
+  route: string,
+  component: () => JSX.Element,
+  defaultCancelable?: boolean,
+}
+
+const ROUTES: readonly TestRouteDef[] = [
+  { name: "Simple Example", route: "/", component: SimpleExample },
+  { name: "Output Example", route: "/output", component: OutputExample, defaultCancelable: false }
 ] as const;
 
-render(() => (
-  <Router>
-    <ModalProvider>
+const App = () => {
+  const location = useLocation();
+  const cancelable = createMemo(() => {
+    const path = location.pathname;
+    const routeDef = ROUTES.find(it => path === it.route);
+    return routeDef?.defaultCancelable;
+  });
+
+  return (
+    <ModalProvider defaultCancelable={cancelable()}>
       <h1>Simple modal examples using `solidjs-modal-context`</h1>
       <ul>
         <For each={ROUTES}>
@@ -33,5 +47,11 @@ render(() => (
         </For>
       </Routes>
     </ModalProvider>
+  );
+};
+
+render(() => (
+  <Router>
+    <App />
   </Router>
 ), root);
