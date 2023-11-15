@@ -56,9 +56,11 @@ export type ModalData<I = undefined, O = undefined> =
  * Props for the {@link ModalProvider}.
  *
  * * `defaultCancelable` - whether modals are cancelable by default if `cancelable` flag is
- *   not provided when the modal is opened. Defaults to false.
+ *   not provided when the modal is opened. Defaults to true.
  */
-export type ModalProviderProps = MaybeFlowProps;
+export type ModalProviderProps = MaybeFlowProps<{
+  defaultCancelable?: boolean
+}>;
 
 // TODO: Think about better modal closing options (e.g. return function after modal opening
 //  or a generic modal closing/popping method)

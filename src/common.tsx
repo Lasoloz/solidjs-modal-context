@@ -6,6 +6,7 @@ export type ModalState<I = undefined, O = undefined> = { component: ModalCompone
 export type ModalRendererProps = {
   state: ModalState<unknown, unknown>;
   onClose: () => void;
+  fallbackCancelable: boolean;
 };
 
 // TODO: Rename it to ModalHost in the future?
@@ -14,21 +15,24 @@ export const ModalRenderer = (props: ModalRendererProps) => {
 
   const createOutsideClick = () => {
     const data = state().data;
-    const cancelable = ("cancelable" in data && data.cancelable) || "onCancel" in data;
-    if (!cancelable) {
-      return () => {
-      };
+
+    if ("onCancel" in data) {
+      const onCancelCallback = data.onCancel;
+      if (onCancelCallback != null) {
+        return () => {
+          onCancelCallback();
+          props.onClose();
+        };
+      }
     }
 
-    const onCancelCallback = data.onCancel;
-    if (onCancelCallback != null) {
-      return () => {
-        onCancelCallback();
-        props.onClose();
-      };
+    // @ts-ignore We don't care, that cancelable might not exist
+    if (!("cancelable" in data) && props.fallbackCancelable || data.cancelable) {
+      return () => props.onClose();
     }
 
-    return () => props.onClose();
+    return () => {
+    };
   };
 
   const createModalClose = () => {

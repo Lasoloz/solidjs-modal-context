@@ -2,6 +2,8 @@ import { createContext, createSignal, Show, useContext } from "solid-js";
 import { ModalComponent, ModalData, ModalOpener, ModalProviderProps } from "./types";
 import { ModalRenderer, ModalState } from "./common";
 
+const DEFAULT_CANCELABLE = true;
+
 type ModalContextType = {
   openModal(component: ModalComponent<unknown, unknown>, data: ModalData<unknown, unknown>): void;
   closeModal(): void;
@@ -42,7 +44,11 @@ export const ModalProvider = (props: ModalProviderProps) => {
   return (
     <ModalContext.Provider value={modalControls}>
       <Show when={modal() != null}>
-        <ModalRenderer state={modal()!} onClose={modalControls.closeModal} />
+        <ModalRenderer
+          state={modal()!}
+          onClose={modalControls.closeModal}
+          fallbackCancelable={props.defaultCancelable ?? DEFAULT_CANCELABLE}
+        />
       </Show>
       {props.children}
     </ModalContext.Provider>
