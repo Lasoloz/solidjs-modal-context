@@ -14,7 +14,8 @@ export const ModalRenderer = (props: ModalRendererProps) => {
 
   const createOutsideClick = () => {
     const data = state().data;
-    if (!data.cancelable) {
+    const cancelable = ("cancelable" in data && data.cancelable) || "onCancel" in data;
+    if (!cancelable) {
       return () => {
       };
     }
