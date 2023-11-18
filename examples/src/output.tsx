@@ -1,8 +1,14 @@
-import { ModalProps, useModalOpener } from "@lib";
+import { ModalProps, ModalProvider, useModalOpener } from "@lib";
 import { createSignal, Show } from "solid-js";
 import { SimpleModal } from "@/utils";
 
-export const OutputExample = () => {
+export const OutputExample = () => (
+  <ModalProvider defaultCancelable={false}>
+    <Example />
+  </ModalProvider>
+);
+
+const Example = () => {
   const openModal = useModalOpener();
   const [output, setOutput] = createSignal<string | null>(null);
 

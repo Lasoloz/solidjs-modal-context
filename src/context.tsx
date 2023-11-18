@@ -48,6 +48,8 @@ export const ModalProvider = (props: ModalProviderProps) => {
           state={modal()!}
           onClose={modalControls.closeModal}
           fallbackCancelable={props.defaultCancelable ?? DEFAULT_CANCELABLE}
+          backdropClass={props.backdropClass}
+          backdropStyle={props.backdropStyle}
         />
       </Show>
       {props.children}
