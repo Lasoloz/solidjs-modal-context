@@ -18,10 +18,18 @@ const Example = () => {
     });
   };
 
+  const handleOpenCancelableOutputModal = () => {
+    openModal(MyModalWithOutput, {
+      onClose: data => setOutput(data),
+      onCancel: () => setOutput("CANCEL HAPPENED")
+    });
+  };
+
   return (
     <div>
       <h2>Open modals with output</h2>
       <button onClick={handleOpenOutputModal}>Open modal with output</button>
+      <button onClick={handleOpenCancelableOutputModal}>Open modal with onCancel handler</button>
       <Show when={output() != null} fallback={<p>No modal output registered yet</p>}>
         <p>Modal output: {output()}</p>
       </Show>
