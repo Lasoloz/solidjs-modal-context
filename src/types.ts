@@ -59,7 +59,9 @@ export type ModalData<I = undefined, O = undefined> =
  *   not provided when the modal is opened. Defaults to true.
  */
 export type ModalProviderProps = MaybeFlowProps<{
-  defaultCancelable?: boolean
+  defaultCancelable?: boolean;
+  backdropClass?: string;
+  backdropStyle?: string;
 }>;
 
 // TODO: Think about better modal closing options (e.g. return function after modal opening
