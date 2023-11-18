@@ -3,6 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <title>simple-modal-context examples</title>
+  <style>
+      /* Used by backdrop styling example */
+      .modal-backdrop {
+          width: 100vw;
+          height: 100vh;
+          position: fixed;
+          box-sizing: border-box;
+          left: 0;
+          top: 0;
+          backdrop-filter: blur(4px);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .red-ish {
+          background-color: rgba(100, 0, 0, 90%);
+      }
+  </style>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>

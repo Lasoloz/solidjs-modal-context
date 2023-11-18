@@ -3,6 +3,7 @@ import { For, JSX } from "solid-js";
 import { A, Route, Router, Routes } from "@solidjs/router";
 import { SimpleExample } from "@/simple";
 import { OutputExample } from "@/output";
+import { BackdropStylingExample } from "@/backdrop-styling";
 
 const root = document.getElementById("root");
 
@@ -20,7 +21,8 @@ type TestRouteDef = {
 
 const ROUTES: readonly TestRouteDef[] = [
   { name: "Simple Example", route: "/", component: SimpleExample },
-  { name: "Output Example", route: "/output", component: OutputExample }
+  { name: "Output Example", route: "/output", component: OutputExample },
+  { name: "Backdrop Styling Example", route: "/styling", component: BackdropStylingExample }
 ] as const;
 
 const App = () => (
