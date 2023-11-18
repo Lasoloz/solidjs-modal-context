@@ -1,7 +1,13 @@
-import { ModalProps, useModalOpener } from "@lib";
+import { ModalProps, ModalProvider, useModalOpener } from "@lib";
 import { FlowProps } from "solid-js";
 
-export const SimpleExample = () => {
+export const SimpleExample = () => (
+  <ModalProvider>
+    <Example />
+  </ModalProvider>
+);
+
+const Example = () => {
   const openModal = useModalOpener();
   const input = "Something";
 

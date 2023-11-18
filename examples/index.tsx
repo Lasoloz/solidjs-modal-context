@@ -1,7 +1,6 @@
 import { render } from "solid-js/web";
-import { createMemo, For, JSX } from "solid-js";
-import { A, Route, Router, Routes, useLocation } from "@solidjs/router";
-import { ModalProvider } from "@lib";
+import { For, JSX } from "solid-js";
+import { A, Route, Router, Routes } from "@solidjs/router";
 import { SimpleExample } from "@/simple";
 import { OutputExample } from "@/output";
 
@@ -17,38 +16,28 @@ type TestRouteDef = {
   name: string,
   route: string,
   component: () => JSX.Element,
-  defaultCancelable?: boolean,
 }
 
 const ROUTES: readonly TestRouteDef[] = [
   { name: "Simple Example", route: "/", component: SimpleExample },
-  { name: "Output Example", route: "/output", component: OutputExample, defaultCancelable: false }
+  { name: "Output Example", route: "/output", component: OutputExample }
 ] as const;
 
-const App = () => {
-  const location = useLocation();
-  const cancelable = createMemo(() => {
-    const path = location.pathname;
-    const routeDef = ROUTES.find(it => path === it.route);
-    return routeDef?.defaultCancelable;
-  });
-
-  return (
-    <ModalProvider defaultCancelable={cancelable()}>
-      <h1>Simple modal examples using `solidjs-modal-context`</h1>
-      <ul>
-        <For each={ROUTES}>
-          {item => <li><A href={item.route}>{item.name}</A></li>}
-        </For>
-      </ul>
-      <Routes>
-        <For each={ROUTES}>
-          {item => <Route path={item.route} component={item.component} />}
-        </For>
-      </Routes>
-    </ModalProvider>
-  );
-};
+const App = () => (
+  <div>
+    <h1>Simple modal examples using `solidjs-modal-context`</h1>
+    <ul>
+      <For each={ROUTES}>
+        {item => <li><A href={item.route}>{item.name}</A></li>}
+      </For>
+    </ul>
+    <Routes>
+      <For each={ROUTES}>
+        {item => <Route path={item.route} component={item.component} />}
+      </For>
+    </Routes>
+  </div>
+);
 
 render(() => (
   <Router>
