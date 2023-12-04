@@ -1,15 +1,20 @@
-import { ModalComponent, ModalData } from "./types";
+import { ForwardModalData, ForwardOpener, ModalComponent, ModalData } from "./types";
 import { Dynamic } from "solid-js/web";
 
 const DEFAULT_BACKDROP_STYLE = "width: 100vw; height: 100vh; position: fixed; left: 0; top: 0;" +
   "background-color: rgba(180, 180, 180, 25%); backdrop-filter: blur(4px);" +
   "display: flex; justify-content: center; align-items: center;";
 
-export type ModalState<I = undefined, O = undefined> = { component: ModalComponent<I, O>, data: ModalData<I, O> };
+export type ModalState<I = undefined, O = undefined> = {
+  component: ModalComponent<I, O>,
+  data: ModalData<I, O>
+};
 
 export type ModalRendererProps = {
   state: ModalState<unknown, unknown>;
   onClose: () => void;
+  onReplaceModal:
+    (component: ModalComponent<unknown, unknown>, data?: ForwardModalData<unknown>) => void;
   fallbackCancelable: boolean;
   backdropClass?: string;
   backdropStyle?: string;
@@ -63,7 +68,14 @@ export const ModalRenderer = (props: ModalRendererProps) => {
       onClick={createOutsideClick()}
     >
       <div onClick={e => e.stopPropagation()}>
-        <Dynamic component={state().component} input={state().data.input} onClose={createModalClose()} />
+        <Dynamic
+          component={state().component}
+          input={state().data.input}
+          onClose={createModalClose()}
+          // TODO: Find a way to gracefully "convert" this opener prop of the modal into the
+          //  prop of the renderer
+          openForwarding={props.onReplaceModal as ForwardOpener<unknown>}
+        />
       </div>
     </div>
   );
