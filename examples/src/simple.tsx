@@ -20,7 +20,7 @@ const Example = () => {
   // noinspection JSUnusedLocalSymbols
   const typeExamples = () => {
     openModal(MyModalWithoutInput, {}); // It's fine
-    openModal(MyModalWithoutInput, { input: "something" }); // It's also fine // TODO: Fix me?
+    // openModal(MyModalWithoutInput, { input: "something" }); // Error, yay!
     // openModal(MyModalWithInput); // Error, yay!
   };
 
