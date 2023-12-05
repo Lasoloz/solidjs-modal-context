@@ -114,6 +114,6 @@ export type ModalProviderProps = MaybeFlowProps<{
  * Type of modal opener function returned by {@link useModalOpener}.
  */
 export type ModalOpener = {
-  (component: ModalComponent): void;
+  <O = undefined>(component: ModalComponent<undefined, O>): void;
   <I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;
 };

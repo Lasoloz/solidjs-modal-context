@@ -48,7 +48,7 @@ const Example = () => {
   };
 
   const openModalWithoutHandler = () => {
-    // openModal(NoInputStringOutputModal); // FIXME: This is a bug!
+    openModal(NoInputStringOutputModal);
   };
 
   return (
