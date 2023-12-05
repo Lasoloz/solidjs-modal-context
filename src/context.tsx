@@ -1,5 +1,5 @@
 import { createContext, createSignal, Show, useContext } from "solid-js";
-import { ModalComponent, ModalData, ModalOpener, ModalProviderProps } from "./types";
+import { ForwardModalData, ModalComponent, ModalData, ModalOpener, ModalProviderProps } from "./types";
 import { ModalRenderer, ModalState } from "./common";
 
 const DEFAULT_CANCELABLE = true;
@@ -41,12 +41,19 @@ export const ModalProvider = (props: ModalProviderProps) => {
     }
   };
 
+  const handleReplaceModal = (
+    component: ModalComponent<unknown, unknown>, data?: ForwardModalData<unknown>
+  ) => {
+    setModal(state => state != null ? ({ component, data: { ...state.data, ...data } }) : null);
+  };
+
   return (
     <ModalContext.Provider value={modalControls}>
       <Show when={modal() != null}>
         <ModalRenderer
           state={modal()!}
           onClose={modalControls.closeModal}
+          onReplaceModal={handleReplaceModal}
           fallbackCancelable={props.defaultCancelable ?? DEFAULT_CANCELABLE}
           backdropClass={props.backdropClass}
           backdropStyle={props.backdropStyle}

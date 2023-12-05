@@ -1,4 +1,12 @@
-import type { ModalComponent, ModalData, ModalOpener, ModalProps, ModalProviderProps } from "./types";
+import type {
+  ForwardModalData,
+  ForwardOpener,
+  ModalComponent,
+  ModalData,
+  ModalOpener,
+  ModalProps,
+  ModalProviderProps
+} from "./types";
 
 export {
   ModalProvider,
@@ -6,6 +14,8 @@ export {
 } from "./context";
 
 export {
+  ForwardModalData,
+  ForwardOpener,
   ModalComponent,
   ModalData,
   ModalOpener,

@@ -16,7 +16,8 @@ import { MaybeFlowProps } from "./common-types";
  */
 export type ModalProps<I = undefined, O = undefined> =
   (I extends undefined ? {} : { input: I })
-  & (O extends undefined ? { onClose: () => void } : { onClose: (data: O) => void });
+  & (O extends undefined ? { onClose: () => void } : { onClose: (data: O) => void })
+  & ({ openForwarding: ForwardOpener<O> });
 
 /**
  * Type definition for modal components
@@ -53,6 +54,49 @@ export type ModalData<I = undefined, O = undefined> =
   );
 
 /**
+ * Modal data for opening a modal from a modal (thus replacing it)
+ *
+ * @example
+ * Opening an inner modal with custom input
+ * ```
+ * const MyInnerModal = (props: ModalProps<number>) => {
+ *   // Omitted
+ * }
+ * const MyModal = (props: ModalProps<string>) => {
+ *   const handleOpen = () => {
+ *     props.openForwarding(MyInnerModal, 2);
+ *   };
+ *   return (<button onClick={handleOpen}>Open inner modal</button>);
+ * }
+ * ```
+ */
+export type ForwardModalData<I = undefined> = I extends undefined ? {} : { input: I };
+/**
+ * Opener method for opening (replacing) a modal from another modal
+ *
+ * @example
+ * Opening an inner modal with custom output
+ * ```
+ * const MyInnerModal = (props: ModalProps<undefined, string>) => {
+ *   // Omitted
+ * }
+ * const MyModal = (props: ModalProps<string, string>) => {
+ *   const handleOpen = () => {
+ *     props.openForwarding(MyInnerModal, { props.input });
+ *   };
+ *   return (<button onClick={handleOpen}>Open inner modal</button>);
+ * }
+ * const MyProblematicInnerModal = (props: ModalProps<undefined, number>) => {
+ *   // Omitted                                                  ^ wrong output type
+ * }
+ * ```
+ */
+export type ForwardOpener<O = undefined> = {
+  (modal: ModalComponent<undefined, O>): void;
+  <I>(modal: ModalComponent<I, O>, data: ForwardModalData<I>): void;
+}
+
+/**
  * Props for the {@link ModalProvider}.
  *
  * * `defaultCancelable` - whether modals are cancelable by default if `cancelable` flag is
@@ -70,6 +114,6 @@ export type ModalProviderProps = MaybeFlowProps<{
  * Type of modal opener function returned by {@link useModalOpener}.
  */
 export type ModalOpener = {
-  (component: ModalComponent): void;
+  <O = undefined>(component: ModalComponent<undefined, O>): void;
   <I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;
 };
