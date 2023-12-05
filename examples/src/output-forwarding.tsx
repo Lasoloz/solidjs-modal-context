@@ -74,6 +74,8 @@ const NoInputNoOutputModal = (props: ModalProps) => {
       StringInputNoOutputModal,
       { input: "Opened from no input/no output modal" }
     );
+    // props.openForwarding(NoInputStringOutputModal); // Error, Yay!
+    // props.openForwarding(StringInputStringOutputModal, { input: "Hello" }); // Error, Yay!
   };
 
   const reopenSelf = () => {
@@ -114,6 +116,8 @@ const NoInputStringOutputModal = (props: ModalProps<undefined, string>) => {
 
   const handleOpenStringModal = () => {
     props.openForwarding(StringInputStringOutputModal, { input: data() });
+    // props.openForwarding(NoInputObjectOutputModal); // Error, yay!
+    // props.openForwarding(NoInputNoOutputModal); // Error, yay
   };
 
   const handleReopenSelf = () => {
