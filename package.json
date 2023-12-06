@@ -1,9 +1,16 @@
 {
   "name": "solidjs-modal-context",
   "description": "A context-based utility for managing complex modals",
+  "keywords": [
+    "solidjs",
+    "modals",
+    "context",
+    "utility",
+    "library"
+  ],
   "author": "László Heim",
   "license": "MIT",
-  "version": "0.4.1-SNAPSHOT",
+  "version": "1.0.0",
   "homepage": "https://github.com/Lasoloz/solidjs-modal-context#readme",
   "repository": {
     "type": "git",
