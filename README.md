@@ -13,7 +13,16 @@ components.
 
 ## Table of Contents
 
-TBD
+1. [Getting started](#getting-started)
+2. [Creating modals](#creating-modals)
+3. [Opening modals](#opening-modals)
+4. [Output forwarding](#output-forwarding)
+5. [Components](#components)
+    - [ModalProvider](#modalprovider)
+6. [Hooks](#hooks)
+    - [useModalOpener](#usemodalopener)
+7. [Caveats](#caveats)
+8. [Future of this library](#future-of-this-library)
 
 ## Getting started
 
@@ -154,4 +163,96 @@ export default RegistrationPage;
 
 ## Output forwarding
 
-TBD
+Right now, the library is quite restrictive. This allows you to always get what you expect.
+For example, if a modal has a given output type, then new modals opened from that modal also
+need to have the same output type.
+
+_Note_: this functionality probably will be extended with support for output transformations,
+so modals can open other modals with a different output type given a correct transformation
+is provided.
+
+The following example demonstrates such a use case:
+
+```tsx
+import { ModalProps } from "solidjs-modal-context";
+
+const UserRegistrationModal = (props: ModalProps<undefined, UserDetails>) => {
+  // implementation
+};
+
+const YesNoModal = (props: ModalProps<undefined, boolean>) => {
+  // implementation
+};
+
+const UserLoginModal = (props: ModalProps<undefined, UserDetails>) => {
+  const handleRegistrationClick = () => {
+    props.openForwarding(UserRegistrationModal);
+  };
+
+  const handleClick = () => {
+    props.openForwarding(YesNoModal);
+    //                   ^ type error here
+  };
+
+  return (
+    <button onClick={handleRegistrationClick}>I don't have an account</button>
+  );
+};
+```
+
+The `openForwarding` function also forces you to provide an input, if the modal requires one:
+
+```tsx
+props.openForwarding(UserRegistrationModal, { input: { requireCaptcha: true } });
+```
+
+## Components
+
+### `ModalProvider`
+
+Provides the context for state management. It also represents the point where the modals will be rendered.
+
+Properties:
+
+| Prop              | Type    | Description                                        | Optional | Defaults to |
+|-------------------|---------|----------------------------------------------------|----------|-------------|
+| defaultCancelable | boolean | Defines default behavior when clicking on backdrop | yes      | true        |
+| backdropClass     | string  | Class attribute for modal backdrop DIV             | yes      | undefined   |
+| backdropStyle     | string  | Style attribute for modal backdrop DIV             | yes      | undefined   |
+
+## Hooks
+
+### `useModalOpener`
+
+Returns a function for opening modals (aka updating the context state)
+
+Has two forms:
+
+1. Opening without modal data: `<O = undefined>(component: ModalComponent<undefined, O>): void;`
+   Cannot be used if modal requires an input
+2. Opening with modal
+   data: `<I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;`
+   Must be used if the modal requires an input. It also can be used if you want to provide additional options, like
+   `onClose` and `onCancel` handlers.
+
+The `ModalData` object has the following fields:
+
+| Field      | Type                                                  | Description                                                                       |
+|------------|-------------------------------------------------------|-----------------------------------------------------------------------------------|
+| input      | `T \| undefined` (Generic)                            | Only exists if the modal requires an input. Has the same type as the modal input  |
+| onClose    | `() => void \| (data: T) => void` (Generic parameter) | Optional field. Has one parameter if the modal specifies an output otherwise none |
+| onCancel   | `() => void`                                          | Optional field. If provided, it makes the modal cancelable                        |
+| cancelable | `boolean`                                             | Optional field. If provided, it can override default backdrop click behavior      |
+
+## Caveats
+
+- If a modal is reopened with `openForwarding`, then its state will not reset properly, as SolidJS does not recreate
+  components unnecessarily. (See `output-forwarding.tsx` in the examples)
+
+## Future of this library
+
+The following features are planned or are work in progress:
+
+- Separate renderer from provider
+- Modal stacking (bad UI practice, but might be needed sometimes)
+- Value forwarding with output transformation
