@@ -3,12 +3,12 @@
 A context-based utility for managing complex modals in SolidJS.
 
 This library lets you create type-safe modals, which can be easily opened within the modal context.
-It also enables data flow between modals and parent component, thus allowing you to read user input without
+It also enables data flow between modals and parent components, thus allowing you to read user input without
 a global application state.
 
-It is advised to use TypeScript for fully utilizing the library's capabilities.
+It is advised to use TypeScript to utilize the library's capabilities fully.
 
-This utility comes with minimal styling, you are free to create your own modals and/or use a UI-library with modal
+This utility comes with minimal styling; you are free to create your modals and/or use a UI library with modal
 components.
 
 ## Table of Contents
@@ -47,7 +47,7 @@ render(() => (
 
 This creates a context for modal management and also sets up the rendering entry point in your application.
 
-_Note_: Currently it is not possible to use a ModalRenderer at a different place
+_Note_: Currently, it is not possible to use a ModalRenderer at a different place
 (the context and renderer are coupled). There is a plan to fix this in the future.
 
 The provider also accepts customizations for modal behavior and backdrop styling:
@@ -77,7 +77,7 @@ const MySimpleModal = () => (
 export default MySimpleModal;
 ```
 
-If you are using TypeScript, then you must provide the `ModalProps` type for the props parameter.
+If you use TypeScript, you must provide the `ModalProps` type for the props parameter.
 
 ```tsx
 import { ModalProps } from "solidjs-modal-context";
@@ -113,7 +113,7 @@ export default UserRegistrationModal;
 
 ## Opening modals
 
-To open a modal, first include the modal opener function, then use the modal component as it's parameter:
+To open a modal, first include the modal opener function, then use the modal component as its parameter:
 
 ```jsx
 import { useModalOpener } from "solidjs-modal-context";
@@ -134,7 +134,7 @@ export default MySimplePage;
 
 The opener function also accepts a modal data object. When your modal accepts input, you *have* to provide the input
 in this object. You can also specify close event and cancellation event handlers. The close event handler resolves with
-0 parameters if your modal has no output, and resolves with the output provided in the `props.close()` call otherwise.
+0 parameters if your modal has no output and resolves with the output provided in the `props.close()` call otherwise.
 
 ```tsx
 import { useModalOpener } from "solidjs-modal-context";
@@ -163,9 +163,9 @@ export default RegistrationPage;
 
 ## Output forwarding
 
-Right now, the library is quite restrictive. This allows you to always get what you expect.
-For example, if a modal has a given output type, then new modals opened from that modal also
-need to have the same output type.
+Right now, the library is quite restrictive. This allows you always to get what you expect.
+For example, if a modal has a given output type, new modals opened from that modal must
+also have the same output type.
 
 _Note_: this functionality probably will be extended with support for output transformations,
 so modals can open other modals with a different output type given a correct transformation
@@ -200,7 +200,7 @@ const UserLoginModal = (props: ModalProps<undefined, UserDetails>) => {
 };
 ```
 
-The `openForwarding` function also forces you to provide an input, if the modal requires one:
+The `openForwarding` function also forces you to provide an input if the modal requires one:
 
 ```tsx
 props.openForwarding(UserRegistrationModal, { input: { requireCaptcha: true } });
@@ -229,29 +229,29 @@ Returns a function for opening modals (aka updating the context state)
 Has two forms:
 
 1. Opening without modal data: `<O = undefined>(component: ModalComponent<undefined, O>): void;`
-   Cannot be used if modal requires an input
+   Cannot be used if the modal requires an input
 2. Opening with modal
    data: `<I = undefined, O = undefined>(component: ModalComponent<I, O>, data: ModalData<I, O>): void;`
-   Must be used if the modal requires an input. It also can be used if you want to provide additional options, like
-   `onClose` and `onCancel` handlers.
+   It must be used if the modal requires an input. It can also be used to provide additional
+   options, like `onClose` and `onCancel` handlers.
 
 The `ModalData` object has the following fields:
 
-| Field      | Type                                                  | Description                                                                       |
-|------------|-------------------------------------------------------|-----------------------------------------------------------------------------------|
-| input      | `T \| undefined` (Generic)                            | Only exists if the modal requires an input. Has the same type as the modal input  |
-| onClose    | `() => void \| (data: T) => void` (Generic parameter) | Optional field. Has one parameter if the modal specifies an output otherwise none |
-| onCancel   | `() => void`                                          | Optional field. If provided, it makes the modal cancelable                        |
-| cancelable | `boolean`                                             | Optional field. If provided, it can override default backdrop click behavior      |
+| Field      | Type                                                  | Description                                                                         |
+|------------|-------------------------------------------------------|-------------------------------------------------------------------------------------|
+| input      | `T \| undefined` (Generic)                            | Only exists if the modal requires an input. Has the same type as the modal input    |
+| onClose    | `() => void \| (data: T) => void` (Generic parameter) | Optional field. Has one parameter if the modal specifies an output; otherwise, none |
+| onCancel   | `() => void`                                          | Optional field. If provided, it makes the modal cancelable                          |
+| cancelable | `boolean`                                             | Optional field. If provided, it can override the default backdrop click behavior    |
 
 ## Caveats
 
-- If a modal is reopened with `openForwarding`, then its state will not reset properly, as SolidJS does not recreate
-  components unnecessarily. (See `output-forwarding.tsx` in the examples)
+- If a modal is reopened with `openForwarding`, its state will not reset properly, as SolidJS does
+  not unnecessarily recreate components. (See `output-forwarding.tsx` in the examples)
 
 ## Future of this library
 
-The following features are planned or are work in progress:
+The following features are planned or are in work in progress state:
 
 - Separate renderer from provider
 - Modal stacking (bad UI practice, but might be needed sometimes)
