@@ -2,7 +2,12 @@ import { ModalProvider, useModalOpener } from "@lib";
 import { SimpleModal } from "@/utils";
 
 export const BackdropStylingExample = () => (
-  <ModalProvider backdropClass="modal-backdrop red-ish" backdropStyle="border: 2em dotted #202020">
+  <ModalProvider
+    backdropClass="modal-backdrop red-ish"
+    backdropStyle="border: 2em dotted #202020"
+    modalRootClass="padded"
+    modalRootStyle="border: 2px dashed black"
+  >
     <Example />
   </ModalProvider>
 );

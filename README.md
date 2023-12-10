@@ -50,7 +50,7 @@ This creates a context for modal management and also sets up the rendering entry
 _Note_: Currently, it is not possible to use a ModalRenderer at a different place
 (the context and renderer are coupled). There is a plan to fix this in the future.
 
-The provider also accepts customizations for modal behavior and backdrop styling:
+The provider also accepts customizations for modal behavior, backdrop styling, and root element styling:
 
 ```jsx
 <ModalProvider
@@ -58,10 +58,16 @@ The provider also accepts customizations for modal behavior and backdrop styling
   backdropClass="fixed left-0 top-0 flex h-full w-full grid-cols-1 grid-rows-1
    items-center justify-center bg-gray-500/50 p-4 backdrop-blur-sm"
   backdropStyle="z-index: 50;"
+  modalRootClass="p-2"
+  modalRootStyle="border: 1px solid black; border-radius: 2px"
 >
   <App />
 </ModalProvider>;
 ```
+
+The modal root represents the first child of the backdrop element, which holds the dynamic modal
+content, and also acts as a click event boundary by specifying the `e => e.stopPropagation()`
+event handler.
 
 ## Creating modals
 
@@ -82,7 +88,7 @@ If you use TypeScript, you must provide the `ModalProps` type for the props para
 ```tsx
 import { ModalProps } from "solidjs-modal-context";
 
-const MySimpleModal = (props: ModalProps) => (
+const AnotherSimpleModal = (props: ModalProps) => (
   <div>
     <p>This is another very simple modal</p>
   </div>
@@ -163,7 +169,7 @@ export default RegistrationPage;
 
 ## Output forwarding
 
-Right now, the library is quite restrictive. This allows you always to get what you expect.
+The library is quite restrictive by design. This allows you to always get what you expect.
 For example, if a modal has a given output type, new modals opened from that modal must
 also have the same output type.
 
@@ -219,6 +225,8 @@ Properties:
 | defaultCancelable | boolean | Defines default behavior when clicking on backdrop | yes      | true        |
 | backdropClass     | string  | Class attribute for modal backdrop DIV             | yes      | undefined   |
 | backdropStyle     | string  | Style attribute for modal backdrop DIV             | yes      | undefined   |
+| modalRootClass    | string  | Class attribute for root modal DIV                 | yes      | undefined   |
+| modalRootStyle    | string  | Style attribute for root modal DIV                 | yes      | undefined   |
 
 ## Hooks
 
@@ -243,6 +251,25 @@ The `ModalData` object has the following fields:
 | onClose    | `() => void \| (data: T) => void` (Generic parameter) | Optional field. Has one parameter if the modal specifies an output; otherwise, none |
 | onCancel   | `() => void`                                          | Optional field. If provided, it makes the modal cancelable                          |
 | cancelable | `boolean`                                             | Optional field. If provided, it can override the default backdrop click behavior    |
+
+## Default minimal styling
+
+The following minimal styling is used to make the modal backdrop look good and follow minimal positioning rules:
+
+```
+width: 100vw;
+height: 100vh;
+position: fixed;
+left: 0;
+top: 0;
+background-color: rgba(180, 180, 180, 25%);
+backdrop-filter: blur(4px);
+display: flex;
+justify-content: center;
+align-items: center;
+```
+
+This can be restyled by the `ModalProvider`'s `backdropClass` and `backdropStyle` properties as needed.
 
 ## Caveats
 
