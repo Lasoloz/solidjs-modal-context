@@ -88,7 +88,7 @@ If you use TypeScript, you must provide the `ModalProps` type for the props para
 ```tsx
 import { ModalProps } from "solidjs-modal-context";
 
-const MySimpleModal = (props: ModalProps) => (
+const AnotherSimpleModal = (props: ModalProps) => (
   <div>
     <p>This is another very simple modal</p>
   </div>
@@ -169,7 +169,7 @@ export default RegistrationPage;
 
 ## Output forwarding
 
-Right now, the library is quite restrictive. This allows you always to get what you expect.
+The library is quite restrictive by design. This allows you to always get what you expect.
 For example, if a modal has a given output type, new modals opened from that modal must
 also have the same output type.
 
@@ -251,6 +251,25 @@ The `ModalData` object has the following fields:
 | onClose    | `() => void \| (data: T) => void` (Generic parameter) | Optional field. Has one parameter if the modal specifies an output; otherwise, none |
 | onCancel   | `() => void`                                          | Optional field. If provided, it makes the modal cancelable                          |
 | cancelable | `boolean`                                             | Optional field. If provided, it can override the default backdrop click behavior    |
+
+## Default minimal styling
+
+The following minimal styling is used to make the modal backdrop look good and follow minimal positioning rules:
+
+```
+width: 100vw;
+height: 100vh;
+position: fixed;
+left: 0;
+top: 0;
+background-color: rgba(180, 180, 180, 25%);
+backdrop-filter: blur(4px);
+display: flex;
+justify-content: center;
+align-items: center;
+```
+
+This can be restyled by the `ModalProvider`'s `backdropClass` and `backdropStyle` properties as needed.
 
 ## Caveats
 
