@@ -50,7 +50,7 @@ This creates a context for modal management and also sets up the rendering entry
 _Note_: Currently, it is not possible to use a ModalRenderer at a different place
 (the context and renderer are coupled). There is a plan to fix this in the future.
 
-The provider also accepts customizations for modal behavior and backdrop styling:
+The provider also accepts customizations for modal behavior, backdrop styling, and root element styling:
 
 ```jsx
 <ModalProvider
@@ -58,10 +58,16 @@ The provider also accepts customizations for modal behavior and backdrop styling
   backdropClass="fixed left-0 top-0 flex h-full w-full grid-cols-1 grid-rows-1
    items-center justify-center bg-gray-500/50 p-4 backdrop-blur-sm"
   backdropStyle="z-index: 50;"
+  modalRootClass="p-2"
+  modalRootStyle="border: 1px solid black; border-radius: 2px"
 >
   <App />
 </ModalProvider>;
 ```
+
+The modal root represents the first child of the backdrop element, which holds the dynamic modal
+content, and also acts as a click event boundary by specifying the `e => e.stopPropagation()`
+event handler.
 
 ## Creating modals
 
@@ -219,6 +225,8 @@ Properties:
 | defaultCancelable | boolean | Defines default behavior when clicking on backdrop | yes      | true        |
 | backdropClass     | string  | Class attribute for modal backdrop DIV             | yes      | undefined   |
 | backdropStyle     | string  | Style attribute for modal backdrop DIV             | yes      | undefined   |
+| modalRootClass    | string  | Class attribute for root modal DIV                 | yes      | undefined   |
+| modalRootStyle    | string  | Style attribute for root modal DIV                 | yes      | undefined   |
 
 ## Hooks
 
