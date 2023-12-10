@@ -106,6 +106,8 @@ export type ModalProviderProps = MaybeFlowProps<{
   defaultCancelable?: boolean;
   backdropClass?: string;
   backdropStyle?: string;
+  modalRootClass?: string;
+  modalRootStyle?: string;
 }>;
 
 // TODO: Think about better modal closing options (e.g. return function after modal opening

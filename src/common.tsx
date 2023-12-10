@@ -18,6 +18,8 @@ export type ModalRendererProps = {
   fallbackCancelable: boolean;
   backdropClass?: string;
   backdropStyle?: string;
+  modalRootClass?: string;
+  modalRootStyle?: string;
 };
 
 export const ModalRenderer = (props: ModalRendererProps) => {
@@ -67,7 +69,11 @@ export const ModalRenderer = (props: ModalRendererProps) => {
       class={props.backdropClass}
       onClick={createOutsideClick()}
     >
-      <div onClick={e => e.stopPropagation()}>
+      <div
+        style={props.modalRootStyle}
+        class={props.modalRootClass}
+        onClick={e => e.stopPropagation()}
+      >
         <Dynamic
           component={state().component}
           input={state().data.input}

@@ -57,6 +57,8 @@ export const ModalProvider = (props: ModalProviderProps) => {
           fallbackCancelable={props.defaultCancelable ?? DEFAULT_CANCELABLE}
           backdropClass={props.backdropClass}
           backdropStyle={props.backdropStyle}
+          modalRootClass={props.modalRootClass}
+          modalRootStyle={props.modalRootStyle}
         />
       </Show>
       {props.children}
